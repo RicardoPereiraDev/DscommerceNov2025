@@ -23,7 +23,20 @@ public class Order {
     private User client;
 
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
+    public Order(){
+
+    }
+
+    public Order(Long id, Instant moment, OrderStatus status, User client, Payment payment) {
+        Id = id;
+        this.moment = moment;
+        this.status = status;
+        this.client = client;
+        this.payment = payment;
+    }
     //Getters and Setters
 
     public Long getId() {
@@ -56,5 +69,13 @@ public class Order {
 
     public void setClient(User client) {
         this.client = client;
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 }
