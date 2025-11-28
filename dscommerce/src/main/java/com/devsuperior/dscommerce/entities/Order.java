@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -90,8 +91,25 @@ public class Order {
 
     /*Este metodo abaixo diz o seguinte: peguei os items da linha 88 e depois faço um stream map para eu converter cada elemento desses itens que é do tipo OrderItem
     vou converter para o Product, eu pego para cada x que é orderItem, eu transformo ele no x.getProduct(), ai eu pego só o produto associado a ele. Então com isso eu vou construir uma nova lista de Products e não mais de OrderItem, o toList() para reconverter para lista e devolvo aqui no meu metodo.
+
       */
     public List<Product> getProducts(){
+
         return items.stream().map(x -> x.getProduct()).toList();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        return Objects.equals(Id, order.Id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Id != null ? Id.hashCode() : 0;
     }
 }
