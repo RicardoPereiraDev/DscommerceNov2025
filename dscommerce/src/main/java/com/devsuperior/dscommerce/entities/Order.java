@@ -3,6 +3,9 @@ package com.devsuperior.dscommerce.entities;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order")
@@ -26,6 +29,8 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
     public Order(){
 
     }
@@ -77,5 +82,16 @@ public class Order {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Set<OrderItem> getItems(){
+        return items;
+    }
+
+    /*Este metodo abaixo diz o seguinte: peguei os items da linha 88 e depois faço um stream map para eu converter cada elemento desses itens que é do tipo OrderItem
+    vou converter para o Product, eu pego para cada x que é orderItem, eu transformo ele no x.getProduct(), ai eu pego só o produto associado a ele. Então com isso eu vou construir uma nova lista de Products e não mais de OrderItem, o toList() para reconverter para lista e devolvo aqui no meu metodo.
+      */
+    public List<Product> getProducts(){
+        return items.stream().map(x -> x.getProduct()).toList();
     }
 }

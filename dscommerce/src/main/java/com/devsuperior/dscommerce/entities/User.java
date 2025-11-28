@@ -14,6 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(unique = true)//Para não haver repetição de email, essa coluna vai ser unica
     private String email;
     private String phone;
     private LocalDate birthDate;
