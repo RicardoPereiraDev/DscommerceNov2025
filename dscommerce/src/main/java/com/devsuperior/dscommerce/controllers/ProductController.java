@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequestMapping(value = "/products")
 public class ProductController {
 
+    @Autowired
     private ProductService service;
 
     //Recurso é o conceito, controlador é a forma de implementar esse conceito, então o controlador implementa um recurso na minha API REST
