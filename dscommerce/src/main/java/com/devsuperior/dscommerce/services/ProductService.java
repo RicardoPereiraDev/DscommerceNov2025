@@ -77,6 +77,12 @@ public class ProductService {
 
     }
 
+    @Transactional
+    public void  delete(Long id){
+
+        repository.deleteById(id);
+    }
+
     //Metdo abaixo é private pk é um metodo interno e não preciso de expor para fora
     private void copyDtoToEntity(ProductDTO dto, Product entity) {
         entity.setName(dto.getName());
