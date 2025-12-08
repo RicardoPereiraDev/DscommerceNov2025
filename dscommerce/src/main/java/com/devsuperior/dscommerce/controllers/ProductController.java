@@ -7,8 +7,11 @@ import com.devsuperior.dscommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +25,9 @@ public class ProductController {
     //Recurso é o conceito, controlador é a forma de implementar esse conceito, então o controlador implementa um recurso na minha API REST
 
     @GetMapping(value = "/{id}") //metodo em baixo para retornar um ProductDTO
-    public ProductDTO findById(@PathVariable Long id){
-        return service.findById(id);
-
-
+    public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
+        ProductDTO productDTO = service.findById(id);
+        return ResponseEntity.ok(productDTO);// 200 OK
 
       //Optional<Product> result = repository.findById(1L);
       //Product product = result.get(); //este result.get pega o objecto, que neste caso é o produto que está dentro do Optional
@@ -33,17 +35,21 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<ProductDTO> findAll(Pageable pageable) {
-        return service.findAll(pageable);
+    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
+        Page<ProductDTO> productDTO = service.findAll(pageable);
+        return ResponseEntity.ok(productDTO);
 
     }
 
 
     @PostMapping
     // Com esse RequestBody, o corpo da requisição qque eu enviar vai entrar nesse parametro do RequestBody e vai instaciar o ProductDTO correspondente
-    public ProductDTO insert(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) {
         dto = service.insert(dto);
-        return dto;
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto); //quando vc cria um recurso, na resposta, além de dar o codigo created(201) no cabeçalho da resposta vai ter o link para o recurso criado que é esse uri
+
 
         }
     }
