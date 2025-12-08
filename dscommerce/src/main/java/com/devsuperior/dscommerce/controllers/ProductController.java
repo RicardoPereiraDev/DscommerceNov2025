@@ -52,4 +52,12 @@ public class ProductController {
 
 
         }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto){
+        dto = service.update(id, dto);// dto que chegou como argumento e dps mandei salvar no service, peguei a referencia atualizada aqui do objecto
+        // retornar com o corpo do dto
+        return ResponseEntity.ok(dto);
+
+        }
     }

@@ -53,18 +53,35 @@ public class ProductService {
         //Copiar para a entidade do Product e depois salvar os dados que vieram no ProductDTO dto, basicamente estou preparando a minha entidade
 
         //Preparar o objecto
-        //Depois copiamos os dados aqui do dto
         Product entity = new Product();
+        //Depois copiamos os dados aqui do dto
+        copyDtoToEntity(dto, entity);
+        //salvamos os dados que copiamos do dto
+        entity= repository.save(entity);//salvo a entidade no banco e obtenho uma nova referencia aqui para ela e salvo na mesma variavel
+        //Depois por fim retornamos o objecto salvo atualizado
+        return new ProductDTO(entity); //retornar um novo ProductDTO a apartir desta entity, para reconverter para DTO e retornar aqui no meu metodo "insert".
+
+    }
+
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO dto) {
+
+        //Só vou instaciar o produto com a referencia do Id que eu passar como argumento, ela não vai no banco de dados
+        Product entity = repository.getReferenceById(id);
+        //Depois copiamos os dados aqui do dto para entity
+        copyDtoToEntity(dto, entity);
+        //salvamos os dados que copiamos do dto
+        entity= repository.save(entity);//salvo a entidade no banco e obtenho uma nova referencia aqui para ela e salvo na mesma variavel
+        //Depois por fim retornamos o objecto salvo atualizado
+        return new ProductDTO(entity); //retornar um novo ProductDTO a apartir desta entity, para reconverter para DTO e retornar aqui no meu metodo "insert".
+
+    }
+
+    //Metdo abaixo é private pk é um metodo interno e não preciso de expor para fora
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
-
-        //salvamos os dados que copiamos do dto
-        entity= repository.save(entity);//salvo a entidade no banco e obtenho uma nova referencia aqui para ela e salvo na mesma variavel
-
-        //Depois por fim retornamos o objecto salvo atualizado
-        return new ProductDTO(entity); //retornar um novo ProductDTO a apartir desta entity, para reconverter para DTO e retornar aqui no meu metodo "insert".
-
     }
 }
