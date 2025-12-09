@@ -4,6 +4,7 @@ import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,15 +69,19 @@ public class ProductService {
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
 
-        //Só vou instaciar o produto com a referencia do Id que eu passar como argumento, ela não vai no banco de dados
-        Product entity = repository.getReferenceById(id);
-        //Depois copiamos os dados aqui do dto para entity
-        copyDtoToEntity(dto, entity);
-        //salvamos os dados que copiamos do dto
-        entity= repository.save(entity);//salvo a entidade no banco e obtenho uma nova referencia aqui para ela e salvo na mesma variavel
-        //Depois por fim retornamos o objecto salvo atualizado
-        return new ProductDTO(entity); //retornar um novo ProductDTO a apartir desta entity, para reconverter para DTO e retornar aqui no meu metodo "insert".
-
+        try{
+            //Só vou instaciar o produto com a referencia do Id que eu passar como argumento, ela não vai no banco de dados
+            Product entity = repository.getReferenceById(id);
+            //Depois copiamos os dados aqui do dto para entity
+            copyDtoToEntity(dto, entity);
+            //salvamos os dados que copiamos do dto
+            entity= repository.save(entity);//salvo a entidade no banco e obtenho uma nova referencia aqui para ela e salvo na mesma variavel
+            //Depois por fim retornamos o objecto salvo atualizado
+            return new ProductDTO(entity); //retornar um novo ProductDTO a apartir desta entity, para reconverter para DTO e retornar aqui no meu metodo "insert".
+        }
+        catch(ResourceNotFoundException e){
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
     }
 
     @Transactional
