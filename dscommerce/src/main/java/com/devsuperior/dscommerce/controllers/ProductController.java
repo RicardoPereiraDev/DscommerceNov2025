@@ -64,7 +64,7 @@ public class ProductController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();// dá certo e não tem corpo na resposta é 0 204
 
         }
     }

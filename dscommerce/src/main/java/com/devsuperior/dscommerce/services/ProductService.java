@@ -3,12 +3,14 @@ package com.devsuperior.dscommerce.services;
 import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
+import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.module.ResolutionException;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +30,7 @@ public class ProductService {
         //ProductDTO dto = new ProductDTO(product); //Copio os dados do product para um novo ProductDTO e vou converter o produto para o DTO
         //return dto;
 
-        Product product = repository.findById(id).get();
+        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));// este orElseThrow vai tentar acessar a um objecto e caso não encontre vou lançar uma excepção
         return new ProductDTO(product);
 
 
