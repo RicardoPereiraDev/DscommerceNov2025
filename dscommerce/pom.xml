@@ -54,6 +54,16 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.6.36.Final</version>
         </dependency>
+		<!-- Ver se esta dependencia do jakarta é mesmo necessário ou se dá conflito futuramente porque não mostra nas video aulas.-->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
     </dependencies>
 
 	<build>
