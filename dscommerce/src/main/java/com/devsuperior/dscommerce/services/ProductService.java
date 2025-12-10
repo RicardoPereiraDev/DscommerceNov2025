@@ -3,12 +3,15 @@ package com.devsuperior.dscommerce.services;
 import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
+import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.module.ResolutionException;
@@ -31,7 +34,8 @@ public class ProductService {
         //ProductDTO dto = new ProductDTO(product); //Copio os dados do product para um novo ProductDTO e vou converter o produto para o DTO
         //return dto;
 
-        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado"));// este orElseThrow vai tentar acessar a um objecto e caso não encontre vou lançar uma excepção
+        Product product = repository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("Recurso não encontrado"));// este orElseThrow vai tentar acessar a um objecto e caso não encontre vou lançar uma excepção
         return new ProductDTO(product);
 
 
@@ -79,15 +83,23 @@ public class ProductService {
             //Depois por fim retornamos o objecto salvo atualizado
             return new ProductDTO(entity); //retornar um novo ProductDTO a apartir desta entity, para reconverter para DTO e retornar aqui no meu metodo "insert".
         }
-        catch(ResourceNotFoundException e){
+        catch(EntityNotFoundException e){
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
     }
 
-    @Transactional
-    public void  delete(Long id){
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id){
+        if(!repository.existsById(id)){
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+        try{
+            repository.deleteById(id);
+        }
+        catch(DataIntegrityViolationException e){
+            throw new DatabaseException("Falha de integridade referencial");
+        }
 
-        repository.deleteById(id);
     }
 
     //Metdo abaixo é private pk é um metodo interno e não preciso de expor para fora
