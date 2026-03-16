@@ -1,6 +1,9 @@
 package com.devsuperior.dscommerce.services;
 
+import com.devsuperior.dscommerce.dto.CategoryDTO;
 import com.devsuperior.dscommerce.dto.ProductDTO;
+import com.devsuperior.dscommerce.dto.ProductMinDTO;
+import com.devsuperior.dscommerce.entities.Category;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
@@ -47,11 +50,15 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, Pageable pageable) {
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
+        //result = uma Page de Product
+        //Ou seja, é uma lista paginada de produtos.
         Page<Product> result = repository.searchByName(name,pageable);
-        //Agora na linha de baixo, vamos ter que converter a minha lista de Produtos para uma lista de ProductDTO e para isso usamos o lambda e explico o metodo abaixo
-        //Para cada registo da minha lista original eu vou chamar o meu new ProductDTO recebendo x
-        return result.map(x ->new ProductDTO(x));
+        //Agora na linha de baixo, vamos ter que converter a minha PAGINA de Produtos para uma lista de ProductMinDTO e para isso usamos o lambda e explico o metodo abaixo
+        //Para cada registo da minha lista original eu vou chamar o meu new ProductMinDTO recebendo x
+        // O x é apenas uma variável temporária que representa cada elemento da página, ou seja, x = cada Product da lista
+        //Cada Product vai virar um ProductMinDTO.
+        return result.map(x -> new ProductMinDTO(x));
     }
 
     @Transactional
@@ -108,5 +115,13 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
+
+        entity.getCategories().clear();
+        for (CategoryDTO catDto : dto.getCategories()) {
+            Category cat = new Category();
+            cat.setId(catDto.getId());
+            entity.getCategories().add(cat);
+        }
+
     }
 }
