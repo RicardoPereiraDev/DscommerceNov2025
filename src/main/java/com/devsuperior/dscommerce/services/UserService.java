@@ -45,6 +45,26 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    /*
+
+    Resumo geral (bem simples)
+
+Este método authenticated() faz:
+
+Pega o utilizador autenticado do Spring Security
+
+Extrai o JWT
+
+Lê o username do token
+
+Vai à base de dados buscar o utilizador
+
+Se falhar → lança erro
+
+🔹 🧠 Em linguagem humana
+
+👉 “Vai buscar o utilizador que fez login usando o token JWT e devolve os dados dele da base de dados.”
+     */
     protected User authenticated() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
