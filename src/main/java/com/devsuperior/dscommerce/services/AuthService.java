@@ -17,3 +17,32 @@ public class AuthService {
     }
 
 }
+/*🔹 🔹 Exemplo prático completo
+
+Rui (id = 5, não admin) tenta aceder userId = 5:
+
+!me.hasRole("ROLE_ADMIN") → true
+
+!me.getId().equals(userId) → false
+
+Resultado: true && false = false → não entra no if ✅ permitido
+
+Rui (id = 5, não admin) tenta aceder userId = 10:
+
+!me.hasRole("ROLE_ADMIN") → true
+
+!me.getId().equals(userId) → true
+
+Resultado: true && true = true → entra no if ❌ acesso negado
+
+Admin (id = qualquer, role = admin) tenta aceder userId = 10:
+
+!me.hasRole("ROLE_ADMIN") → false
+
+!me.getId().equals(userId) → true
+
+Resultado: false && true = false → não entra no if ✅ permitido
+
+🔹 🔹 Em linguagem simples
+
+“Se não és admin e não és o dono da conta, então bloqueia o acesso.” */

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -44,7 +45,7 @@ public class ProductController {
 
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     // Com esse RequestBody, o corpo da requisição qque eu enviar vai entrar nesse parametro do RequestBody e vai instaciar o ProductDTO correspondente
     public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
@@ -56,6 +57,7 @@ public class ProductController {
 
         }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id,@Valid @RequestBody ProductDTO dto){
         dto = service.update(id, dto);// dto que chegou como argumento e dps mandei salvar no service, peguei a referencia atualizada aqui do objecto
@@ -64,6 +66,7 @@ public class ProductController {
 
         }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
