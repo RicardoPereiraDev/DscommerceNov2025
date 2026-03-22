@@ -8,7 +8,7 @@ import java.util.Objects;
 @Table(name = "tb_order_item")
 public class OrderItem {
     @EmbeddedId
-    private OrderItemPk id = new OrderItemPk();//este od é que vai ter a referencia para order e product
+    private OrderItemPk id = new OrderItemPk();//este id é que vai ter a referencia para order e product
 
     private Integer quantity;
     private Double price;

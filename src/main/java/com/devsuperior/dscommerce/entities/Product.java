@@ -95,7 +95,7 @@ public class Product {
 
     //Vou pegar o meu items que é a lista do tipo Set OrderItem e depois para objecto x de cada OrderItem, eu pego e chamo x.getOrder, pk ai eu pego só order que está dentro desse OrderItem
     public List<Order> getOrders(){
-        return items.stream().map(x-> x.getOrder()).toList();
+        return items.stream().map(x-> x.getOrder()).toList(); // tem explicação nas anotações guardadas
     }
 
     @Override

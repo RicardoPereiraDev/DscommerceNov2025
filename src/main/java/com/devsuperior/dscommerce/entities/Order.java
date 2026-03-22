@@ -95,6 +95,12 @@ public class Order {
       */
     public List<Product> getProducts(){
 
+        /*“Para cada item, pega o produto e devolve uma lista desses produtos”
+
+         x = cada elemento da lista items
+
+         Cada OrderItem tem um Product dentro dele
+          */
         return items.stream().map(x -> x.getProduct()).toList();
     }
 
